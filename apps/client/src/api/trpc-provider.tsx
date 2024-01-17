@@ -19,7 +19,7 @@ export const TRPCProvider = ({
             links: [
                 // @ts-ignore
                 httpBatchLink({
-                    url: 'http://localhost:4000/trpc',
+                    url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/trpc`,
                     // You can pass any HTTP headers you wish here
                     async headers() {
                         return {
