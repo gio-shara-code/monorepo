@@ -26,5 +26,10 @@
         "typescript": "^5.0.2",
         "webpack": "^5.89.0",
         "webpack-cli": "^5.1.4"
-    }
+    },
+    "engines": {
+        "node": "20.x",
+        "yarn": "please use pnpm"
+    },
+    "packageManager": "pnpm@8.6.1"
 }
