@@ -1,1 +1,1 @@
-web: 'cd apps/backend && pnpm start:backend'
+web: 'cd apps/backend && pnpm start'
