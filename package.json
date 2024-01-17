@@ -1,0 +1,16 @@
+{
+    "name": "whatever",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "dev": "turbo dev",
+        "build": "turbo build",
+        "start": "turbo start"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "prettier": "^3.2.2"
+    }
+}
