@@ -5,12 +5,23 @@
     "scripts": {
         "dev": "turbo dev",
         "build": "turbo build",
-        "start": "turbo start"
+        "start": "turbo start",
+        "build:client": "turbo build --filter=client",
+        "build:backend": "turbo build --filter=backend",
+        "heroku-postbuild": "if [ $CLIENT_ENV ]; then pnpm prod-client; elif [ $SERVER_ENV ]; then pnpm prod-backend; else echo no environment detected, please set CLIENT_ENV or SERVER_ENV; fi",
+        "prod-client": "pnpm build:client",
+        "prod-backend": "pnpm build:backend",
+        "postinstall": "if [ $CLIENT_ENV ]; then npm run postinstall-client; elif [ $SERVER_ENV ]; then npm run postinstall-backend; else echo no environment detected, please set CLIENT_ENV or SERVER_ENV; fi",
+        "postinstall-client": "pnpm --filter=client i",
+        "postinstall-backend": "pnpm --filter=backend i"
     },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
     "devDependencies": {
-        "prettier": "^3.2.2"
-    }
+        "prettier": "^3.2.2",
+        "turbo": "^1.11.3"
+    },
+    "engines": {
+        "node": "20.x",
+        "yarn": "please use pnpm"
+    },
+    "packageManager": "pnpm@8.6.1"
 }

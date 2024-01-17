@@ -3,7 +3,7 @@
 import React, { ReactNode, useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { httpBatchLink } from '@trpc/client'
-import { trpc } from './trpc'
+import { api } from './api'
 
 export const TRPCProvider = ({
     children,
@@ -15,7 +15,7 @@ export const TRPCProvider = ({
     const [queryClient] = useState(() => new QueryClient())
     const [trpcClient] = useState(() =>
         // @ts-ignore
-        trpc.createClient({
+        api.createClient({
             links: [
                 // @ts-ignore
                 httpBatchLink({
@@ -32,10 +32,10 @@ export const TRPCProvider = ({
         })
     )
     return (
-        <trpc.Provider client={trpcClient} queryClient={queryClient}>
+        <api.Provider client={trpcClient} queryClient={queryClient}>
             <QueryClientProvider client={queryClient}>
                 {children}
             </QueryClientProvider>
-        </trpc.Provider>
+        </api.Provider>
     )
 }

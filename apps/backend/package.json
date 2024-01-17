@@ -1,8 +1,8 @@
 {
     "name": "@whatever/backend",
     "version": "1.0.0",
-    "types": "./dist/index.d.ts",
-    "main": "./dist/index.js",
+    "main": "./src/trpc.ts",
+    "types": "./src/trpc.ts",
     "scripts": {
         "start": "node ./dist/server.js",
         "build": "tsc",

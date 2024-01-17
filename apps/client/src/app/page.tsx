@@ -1,9 +1,9 @@
 'use client'
 import Image from 'next/image'
-import { trpc } from '@/api/trpc'
+import { api } from '@/api/api'
 
 export default function Home() {
-    const { data, isLoading } = trpc.getUser.useQuery('123234')
+    const { data, isLoading } = api.getUser.useQuery('123234')
     console.log('data:', data)
     return (
         <main className="flex min-h-screen flex-col items-center justify-between p-24">
