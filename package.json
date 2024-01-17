@@ -1,7 +1,7 @@
 {
     "name": "whatever",
     "version": "1.0.0",
-    "description": "",
+    "description": "this is whatever project",
     "scripts": {
         "dev": "turbo dev",
         "start:client": "turbo run start --filter=client",
