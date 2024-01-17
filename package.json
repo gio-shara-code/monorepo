@@ -4,6 +4,8 @@
     "description": "",
     "scripts": {
         "dev": "turbo dev",
+        "start:client": "turbo run start --filter=client",
+        "start:backend": "turbo run start --filter=backend",
         "build": "turbo build",
         "build:client": "turbo build --filter=client",
         "build:backend": "turbo build --filter=backend",
