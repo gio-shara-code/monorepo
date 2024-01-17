@@ -11,7 +11,7 @@
         "heroku-postbuild": "if [ $CLIENT_ENV ]; then pnpm prod-client; elif [ $SERVER_ENV ]; then pnpm prod-backend; else echo no environment detected, please set CLIENT_ENV or SERVER_ENV; fi",
         "prod-client": "pnpm build:client",
         "prod-backend": "pnpm build:backend",
-        "postinstall": "if [ $CLIENT_ENV ]; then npm run postinstall-client; elif [ $SERVER_ENV ]; then npm run postinstall-backend; else echo no environment detected, please set CLIENT_ENV or SERVER_ENV; fi",
+        "postinstall": "if [ $CLIENT_ENV ]; then pnpm postinstall-client; elif [ $SERVER_ENV ]; then pnpm postinstall-backend; else echo no environment detected, please set CLIENT_ENV or SERVER_ENV; fi",
         "postinstall-client": "pnpm --filter=client i",
         "postinstall-backend": "pnpm --filter=backend i"
     },
