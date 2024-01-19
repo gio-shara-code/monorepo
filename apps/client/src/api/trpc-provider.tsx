@@ -13,9 +13,8 @@ export const TRPCProvider = ({
     cookies: string
 }) => {
     const [queryClient] = useState(() => new QueryClient())
-    const [trpcClient] = useState(() =>
-        // @ts-ignore
-        api.createClient({
+    const [trpcClient] = useState(() => {
+        return api.createClient({
             links: [
                 // @ts-ignore
                 httpBatchLink({
@@ -24,13 +23,14 @@ export const TRPCProvider = ({
                     async headers() {
                         return {
                             cookie: cookies,
+                            authorization: `Bearer ${cookies}`,
                             'x-trpc-source': 'react',
                         }
                     },
                 }),
             ],
         })
-    )
+    })
     return (
         <api.Provider client={trpcClient} queryClient={queryClient}>
             <QueryClientProvider client={queryClient}>
