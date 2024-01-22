@@ -1,9 +1,16 @@
 'use client'
 
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { httpBatchLink } from '@trpc/client'
 import { api } from './api'
+import { useAuthInfoStore } from '@/lib/store'
+
+// NOTE tricky way to update the client header using global variable. info.token only does not update the headers.
+let authToken = ''
+export const setAuthToken = (token: string) => {
+    authToken = token
+}
 
 export const TRPCProvider = ({
     children,
@@ -12,19 +19,19 @@ export const TRPCProvider = ({
     children: ReactNode
     cookies: string
 }) => {
+    const { info } = useAuthInfoStore()
     const [queryClient] = useState(() => new QueryClient())
+
     const [trpcClient] = useState(() => {
         return api.createClient({
             links: [
-                // @ts-ignore
                 httpBatchLink({
                     url: `${process.env.NEXT_PUBLIC_BACKEND_URL}/trpc`,
-                    // You can pass any HTTP headers you wish here
                     async headers() {
                         return {
                             cookie: cookies,
-                            authorization: `Bearer ${cookies}`,
                             'x-trpc-source': 'react',
+                            authorization: `Bearer ${authToken || info.token}`,
                         }
                     },
                 }),
