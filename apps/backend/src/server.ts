@@ -1,12 +1,8 @@
 import * as trpcExpress from '@trpc/server/adapters/express'
 import express from 'express'
-import { appRouter } from './trpc'
 import cors from 'cors'
-const createContext = ({
-    req,
-    res,
-}: trpcExpress.CreateExpressContextOptions) => ({}) // no context
-type Context = Awaited<ReturnType<typeof createContext>>
+import { appRouter } from './routers'
+import { createContext } from './trpc'
 
 const app = express()
 app.use(cors())

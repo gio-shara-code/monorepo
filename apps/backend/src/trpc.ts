@@ -1,10 +1,38 @@
-// import superjson from 'superjson'
-import { initTRPC } from '@trpc/server'
-import { z, ZodError } from 'zod'
+import { initTRPC, TRPCError } from '@trpc/server'
+import { ZodError } from 'zod'
+import jwt from 'jsonwebtoken'
+import { config } from './config'
+import * as trpcExpress from '@trpc/server/dist/adapters/express'
 
-// export const transformer = superjson
+type JWTPayload = {
+    id: string
+    username: string
+}
 
-export const t = initTRPC.meta().create({
+export const createContext = ({
+    req,
+    res,
+}: trpcExpress.CreateExpressContextOptions) => {
+    if (req.headers.authorization) {
+        const authToken = req.headers.authorization?.split('Bearer ')[1]
+        try {
+            return {
+                user: jwt.verify(
+                    authToken,
+                    config.RSA_PUBLIC_KEY
+                ) as JWTPayload,
+            }
+        } catch (err) {
+            console.error("authorization token couldn't be verified", err)
+            return {}
+        }
+    }
+    return {}
+}
+
+type Context = Awaited<ReturnType<typeof createContext>>
+
+export const t = initTRPC.context<Context>().create({
     // transformer,
     errorFormatter(opts) {
         const { shape, error } = opts
@@ -21,22 +49,19 @@ export const t = initTRPC.meta().create({
         }
     },
 })
-export const appRouter = t.router({
-    getUser: t.procedure
-        .input(z.string())
-        .output(z.object({ id: z.string(), name: z.string() }))
-        .query((opts) => {
-            opts.input
-            return { id: opts.input, name: 'Love Trpc ❤️' }
-        }),
-    createUser: t.procedure
-        .meta({ openapi: { method: 'POST', path: '/createUser' } })
-        .input(z.object({ name: z.string().min(5) }))
-        .mutation(async (opts) => {
-            // use your ORM of choice
-            console.log('opts', opts.input.name)
-            return 'created!'
-        }),
-})
-// export type definition of API
-export type AppRouter = typeof appRouter
+export const router = t.router
+export const publicProcedure = t.procedure
+
+export const protectedProcedure = t.procedure.use(
+    async function isAuthed(opts) {
+        const { ctx } = opts
+
+        if (!ctx.user) throw new TRPCError({ code: 'UNAUTHORIZED' })
+
+        return opts.next({
+            ctx: {
+                user: ctx.user,
+            },
+        })
+    }
+)
