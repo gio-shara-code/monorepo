@@ -15,6 +15,11 @@ import {
     FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { api } from '@/api/api'
+import { faker } from '@faker-js/faker'
+import { useAuthInfoStore } from '@/lib/store'
+import { toast } from '@/components/ui/use-toast'
+import { setAuthToken } from '@/api/trpc-provider'
 
 const formSchema = z.object({
     username: z.string().min(2, {
@@ -26,19 +31,38 @@ const formSchema = z.object({
 })
 
 export function RegisterForm() {
-    // 1. Define your form.
+    const { setInfo } = useAuthInfoStore()
+    const { mutateAsync, isLoading, isError } =
+        api.authRouter.registerUsernamePassword.useMutation({
+            onError: () => {
+                toast({
+                    title: 'Error',
+                    description: 'Error registering.',
+                    className: 'bg-red-500 text-white',
+                })
+            },
+        })
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: '',
+            password: faker.internet.password(),
+            username: faker.internet.userName(),
         },
     })
 
-    // 2. Define a submit handler.
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        const token = await mutateAsync({
+            username: values.username,
+            password: values.password,
+        })
+        toast({
+            title: 'Success',
+            description: 'Successfully registered.',
+        })
+        setAuthToken(token!)
+        setInfo({
+            token,
+        })
     }
 
     return (
@@ -80,7 +104,9 @@ export function RegisterForm() {
                         </FormItem>
                     )}
                 />
-                <Button type="submit">Submit</Button>
+                <Button loading={isLoading} type="submit">
+                    Submit
+                </Button>
             </form>
         </Form>
     )
