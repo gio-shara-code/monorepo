@@ -1,6 +1,11 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+generator zod {
+  provider = "prisma-zod-generator"
+  output   = "../src/generated"
+}
+
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["multiSchema"]
@@ -13,13 +18,24 @@ datasource db {
 }
 
 model AuthBase {
+  id          String        @id @default(cuid())
+  username    String        @unique
+  password    String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  ProfileBase ProfileBase[]
+
+  @@map("base")
+  @@schema("auth")
+}
+
+model ProfileBase {
   id        String   @id @default(cuid())
-  email     String   @unique
   name      String?
-  password  String?
+  authBase  AuthBase @relation(fields: [id], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("base")
-  @@schema("auth")
+  @@schema("profiles")
 }
