@@ -1,28 +1,35 @@
 {
     "name": "@whatever/backend",
     "version": "1.0.0",
-    "main": "./src/trpc.ts",
-    "types": "./src/trpc.ts",
+    "main": "./src/index.ts",
+    "types": "./src/index.ts",
     "scripts": {
         "start": "node ./dist/server.js",
         "build": "tsc",
         "dev": "nodemon ./src/server.ts",
-        "migrate": "prisma migrate dev"
+        "migrate": "prisma migrate dev",
+        "generate": "prisma generate"
     },
     "dependencies": {
         "@prisma/client": "5.8.1",
         "@trpc/server": "^10.45.0",
         "cors": "^2.8.5",
         "express": "^4.18.2",
+        "firebase-admin": "^12.0.0",
+        "jsonwebtoken": "^9.0.2",
         "superjson": "^2.2.1",
+        "znv": "^0.4.0",
         "zod": "^3.22.4"
     },
     "devDependencies": {
         "@types/cors": "^2.8.17",
         "@types/express": "^4.17.21",
+        "@types/jsonwebtoken": "^9.0.5",
         "@types/node": "^20",
+        "dotenv": "^16.3.2",
         "nodemon": "^3.0.2",
         "prisma": "^5.8.1",
+        "prisma-zod-generator": "^0.8.13",
         "ts-loader": "^9.5.1",
         "ts-node": "^10.9.2",
         "typescript": "^5.0.2",
