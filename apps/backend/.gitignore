@@ -1,3 +1,4 @@
 node_modules
 # Keep environment variables out of version control
 .env
+ninja-personal-project-firebase-adminsdk-eodv2-8317dbbfc3.json
