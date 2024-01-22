@@ -1,2 +1,1 @@
-export * from './shared'
-export { AppRouter } from './trpc'
+export { AppRouter } from './routers'
