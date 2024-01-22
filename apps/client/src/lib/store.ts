@@ -49,7 +49,7 @@ export const useAuthInfoStore = create<AuthInfoStore>()(
             },
         }),
         {
-            name: 'ninja.auth_store',
+            name: 'whatever.auth_store',
         }
     )
 )
